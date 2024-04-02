@@ -3,14 +3,58 @@ import Card from "../../../../components/card";
 import InputField from "../../../../components/fields/InputField";
 import { useNavigate, useParams } from "react-router-dom"; 
 
+import axios from "axios"
+
 const InstructionsCard = () => {
   const navigate = useNavigate();
   const { examCode } = useParams();
   const [enteredExamCode, setEnteredExamCode] = useState("");
   const [error, setError] = useState("");
 
-  const handleStartExam = () => {
+  const handleStartExam = async() => {
     if (enteredExamCode === examCode) {
+      const userDataString = sessionStorage.getItem('user');
+      const userDataJSON = JSON.parse(userDataString);
+      const email = userDataJSON.email;
+      console.log(email);
+      const response = await fetch('http://localhost:3001/student/student-info', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch student info');
+      }
+  
+      const student_data = await response.json();
+      const name=student_data.name;
+      const prn=student_data.prn;
+      
+
+      // const name = "Mahesh Gadekar";
+      // const prn = "211080gh5";
+
+      await axios.post("http://localhost:3001/activity", 
+        {
+          studentName : name, 
+          prn : prn, 
+          courseCode : examCode
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+        .then((data) => {
+            console.log(data);
+        })  
+        .catch((err) => {
+            console.log(err);
+        })    
+
       navigate(`/exam/code-editor/${examCode}`);
     } else {
       setError("Entered exam code does not match. Please try again.");

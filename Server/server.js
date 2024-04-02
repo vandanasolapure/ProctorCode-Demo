@@ -21,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/faculty", require("./Routes/facultyRoutes"));
 app.use("/student", require("./Routes/studentRoutes"));
+app.use("/activity", require("./Routes/studentActivityRoutes"));
 
 app.use("/course", require("./Routes/courseRoutes"));
 app.use("/exam", require("./Routes/examRoutes"));

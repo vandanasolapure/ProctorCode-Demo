@@ -74,6 +74,34 @@ try {
     response.send("delete  contacts with id :" + contact);
   };
 
+
+  const getStudentInfo = async (req, res) => {
+    const { email } = req.body;
+  
+    try {
+      // Find the student with the provided email
+      const student = await studentModel.findOne({ email });
+  
+      if (!student) {
+        return res.status(404).json({ error: true, message: "Student not found" });
+      }
+  
+      // Return the student's name and PRN number
+      res.status(200).json({ name: student.name, prn: student.prn });
+    } catch (error) {
+      console.error("Error fetching student info:", error);
+      res.status(500).json({ error: true, message: "Internal server error" });
+    }
+  };
+
+
+
+
+
+
+
+
+
   const getAllStudents = async(request, response)=>{
     console.log("getAllstudents")
     try {
@@ -93,6 +121,7 @@ try {
     getOneStudent,
     updateStudent,
     deleteStudent,
+    getStudentInfo,
     getAllStudents
   };
 } catch (err) {

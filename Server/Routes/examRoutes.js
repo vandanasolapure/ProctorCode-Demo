@@ -7,4 +7,5 @@ router.route("/").post(addExam);
 router.route("/get-exams").get(getExam);
 router.route("/getOneExam").post(getOneExam)
 
+
 module.exports = router;
